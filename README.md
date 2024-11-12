@@ -28,6 +28,7 @@ An ESP32 serves as the central controller and web server, allowing you to:
 ## Installation
 
 1. **Flash ESP32**
+
 Install [esptool](https://github.com/espressif/esptool) and flash MicroPython to the OLIMEX ESP32 POE board:
 ```bash
 esptool.py --port /dev/ttyUSB0 erase_flash
@@ -35,6 +36,7 @@ esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 460800 write_flash -z 0x1000 
 ```
 
 2. **Upload Project Files**
+
 Upload the Python scripts and the `templates` directory along with the necessary libs to the ESP32, e.g. via `rshell`:
 ```bash
 rshell -p /dev/ttyUSB0 cp -r src/* /pyboard/
@@ -44,9 +46,11 @@ rshell -p /dev/ttyUSB0 cp libs/MicroPython_MFRC522/micropython_mfrc522/mfrc522.p
 ```
 
 3. **Connect RFID and Relay**
+
 Connect the RFID reader and relay module to the ESP32 board according to the pin configuration **TODO**.
 
 4. **Set Username and Password**
+
 Create a `credentials.txt` file on the ESP32 with the login credentials:
 ```plaintext
 admin
