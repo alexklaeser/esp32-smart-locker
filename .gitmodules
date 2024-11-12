@@ -1,0 +1,6 @@
+[submodule "libs/MicroPython_MFRC522"]
+	path = libs/MicroPython_MFRC522
+	url = https://github.com/vtt-info/MicroPython_MFRC522.git
+[submodule "libs/microdot"]
+	path = libs/microdot
+	url = https://github.com/miguelgrinberg/microdot.git
