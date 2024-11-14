@@ -47,7 +47,9 @@ rshell -p /dev/ttyUSB0 cp libs/MicroPython_MFRC522/micropython_mfrc522/mfrc522.p
 
 3. **Connect RFID and Relay**
 
-Connect the RFID reader and relay module to the ESP32 board according to the pin configuration **TODO**.
+Connect the RFID reader and relay module to the ESP32 board according to the pin configuration below:
+
+![ESP32 Smart Locker - example layout with a cash register](./gfx/layout.png)
 
 4. **Set Username and Password**
 
