@@ -61,13 +61,13 @@ my_secure_password
 
 ## Usage
 
-- **Accessing the Web Interface**
-  - Connect to the ESP32’s IP address in a browser to open the management interface.
-  - Log in with your credentials to add or remove RFID tags.
+**Accessing the Web Interface**
+- Connect to the ESP32’s IP address in a browser to open the management interface.
+- Log in with your credentials to add or remove RFID tags.
+- Register new tags and link them with user information
+- Delete tags as needed
 
-- **Tag Management**
-  - Register new tags and link them with user information
-  - Delete tags as needed
+![ESP32 Smart Locker - Web UI screenshot for RFID tag management](./gfx/screenshot_web_ui.png)
 
 ## Code Overview
 
