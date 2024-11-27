@@ -22,9 +22,6 @@ def setup_lan():
         print("Keine Netzverbindung!")
 
 
-# Rufe setup_lan auf, um das LAN mit DHCP zu aktivieren
-setup_lan()
-
 from microdot import Microdot, Response
 from microdot.utemplate import Template
 
@@ -89,7 +86,8 @@ async def add_tag(request):
     print('  {}'.format(new_tag))
 
     if 'username' in new_tag and 'timestamp' in new_tag:
-        uid = await tools.read_uid()
+        with tools.disable_opening_cash_register():
+            uid = await tools.read_uid()
         if uid is None:
             return {'success': False}, 400
         else:
@@ -113,8 +111,12 @@ async def delete_tag(request):
         return {'success': False}, 400
 
 
-print("Starting RFID reading...")
-tools.start_rfid_reading()
+if __name__ == '__main__':
+    # Rufe setup_lan auf, um das LAN mit DHCP zu aktivieren
+    setup_lan()
 
-print("Starting web server...")
-app.run(port=80)
+    print("Starting RFID reading...")
+    tools.start_rfid_reading()
+
+    print("Starting web server...")
+    app.run(port=80)

@@ -1,4 +1,5 @@
 import ujson
+import contextlib
 from machine import Pin, SoftSPI
 from mfrc522 import MFRC522
 import random
@@ -60,8 +61,23 @@ spi = SoftSPI(baudrate=1000000, polarity=0, phase=0, sck=sck, mosi=mosi, miso=mi
 sda = Pin(2, Pin.OUT)
 reader = MFRC522(spi, sda)
 
+_open_cash_allowed = True
+
+
+@contextlib.contextmanager
+def disable_opening_cash_register():
+    global _open_cash_allowed
+    x = _open_cash_allowed
+    _open_cash_allowed = False
+    try:
+        yield x
+    finally:
+        _open_cash_allowed = x
+
 
 async def open_cash_register():
+    if not _open_cash_allowed:
+        return
     relay = Pin(13, Pin.OUT)
     relay.value(0)
     await asyncio.sleep_ms(300)
