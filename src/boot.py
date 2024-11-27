@@ -78,6 +78,21 @@ async def index(request):
     return Template("main.html").render(tags=tags)
 
 
+@app.route('/tag')
+@requires_auth
+async def get_tag(request):
+    print('/tag GET')
+    with tools.disable_opening_cash_register():
+        uid = await tools.read_uid()
+
+    data = None
+    if uid:
+        data = tools.get_data(uid)
+    if data:
+        return data, 200
+    return {}, 400
+
+
 @app.put('/tags')
 @requires_auth
 async def add_tag(request):

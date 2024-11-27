@@ -54,6 +54,12 @@ def is_uid_registered(uid):
     return uid in uids
 
 
+def get_data(uid):
+    for data in _tags:
+        if data['uid'] == uid:
+            return data
+
+
 sck = Pin(14, Pin.OUT)
 mosi = Pin(15, Pin.OUT)
 miso = Pin(35)
