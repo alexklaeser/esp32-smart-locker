@@ -1,31 +1,31 @@
 import ujson
-import os
+import contextlib
 from machine import Pin, SoftSPI
-import time
 from mfrc522 import MFRC522
-import _thread
 import random
 import asyncio
 
 
 def load_credentials():
-    with open("credentials.txt", "r") as f:
+    with open("credentials.txt") as f:
         username = f.readline().strip()
         password = f.readline().strip()
     return username, password
+
 
 USERNAME, PASSWORD = load_credentials()
 
 
 def load_authorized_uids():
     try:
-        with open("/authorized_uids.json", "r") as f:
+        with open("/authorized_uids.json") as f:
             return ujson.load(f)
     except:
         return []
-    
+
 
 _tags = load_authorized_uids()
+
 
 def save_authorized_uids(tags):
     global _tags
@@ -54,6 +54,12 @@ def is_uid_registered(uid):
     return uid in uids
 
 
+def get_data(uid):
+    for data in _tags:
+        if data['uid'] == uid:
+            return data
+
+
 sck = Pin(14, Pin.OUT)
 mosi = Pin(15, Pin.OUT)
 miso = Pin(35)
@@ -61,13 +67,28 @@ spi = SoftSPI(baudrate=1000000, polarity=0, phase=0, sck=sck, mosi=mosi, miso=mi
 sda = Pin(2, Pin.OUT)
 reader = MFRC522(spi, sda)
 
+_open_cash_allowed = True
+
+
+@contextlib.contextmanager
+def disable_opening_cash_register():
+    global _open_cash_allowed
+    x = _open_cash_allowed
+    _open_cash_allowed = False
+    try:
+        yield x
+    finally:
+        _open_cash_allowed = x
+
 
 async def open_cash_register():
+    if not _open_cash_allowed:
+        return
     relay = Pin(13, Pin.OUT)
     relay.value(0)
     await asyncio.sleep_ms(300)
     relay.value(1)
-    
+
 
 def start_rfid_reading():
     asyncio.create_task(_rfid_reading())
@@ -75,6 +96,8 @@ def start_rfid_reading():
 
 _last_uid = None
 _n_status_err = 0
+
+
 async def _rfid_reading():
     global _last_uid, _n_status_err
     while True:
@@ -99,15 +122,13 @@ async def _rfid_reading():
 
 async def read_uid():
     global _last_uid
-    
+
     # try a few times to read the UID
     for i in range(20):
         if _last_uid is not None:
             return _last_uid
         # allow for some randomness here, to avoid race conditions with RFID reading thread
         await asyncio.sleep_ms(random.randint(200, 300))
-    
+
     # no card read until now
     return None
-
-
