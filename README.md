@@ -45,6 +45,9 @@ rshell -p /dev/ttyUSB0 cp -r libs/microdot/libs/common/utemplate /pyboard/
 rshell -p /dev/ttyUSB0 cp libs/MicroPython_MFRC522/micropython_mfrc522/mfrc522.py /pyboard/
 ```
 
+Note that you need to rename `_boot.py` to `boot.py` in order to make the network and the web server working out of the box.
+Do this step intentionally by hand in order to ensure to have control over this, as renaming the file will not make it possible to debug the OLIMEX board anymore (e.g., via Thonny).
+
 3. **Connect RFID and Relay**
 
 Connect the RFID reader and relay module to the ESP32 board according to the pin configuration below:
