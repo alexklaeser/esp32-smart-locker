@@ -1,6 +1,8 @@
 import asyncio
 import binascii
 import time
+import sys
+import ssl
 
 import machine
 import network
@@ -176,7 +178,10 @@ async def delete_tag(request):
 async def _start_web_server():
     print('Starting web server...')
     # app.run(port=80)
-    await app.start_server(debug=False, port=80)
+    ext = 'der' if sys.implementation.name == 'micropython' else 'pem'
+    sslctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    sslctx.load_cert_chain('cert.' + ext, 'key.' + ext)
+    await app.start_server(debug=False, port=443, ssl=sslctx)
 
 
 def start_web_server():
